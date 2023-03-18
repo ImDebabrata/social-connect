@@ -5,21 +5,54 @@
   width: 650px;
   height: 400px;
   margin: auto;
-  border: 2px solid black;
+  // border: 2px solid black;
   position: relative;
   transition: all 0.5s ease-in-out;
   > .form_container {
     width: 450px;
     height: 100%;
     border: 1px solid blue;
+    position: relative;
     float: left;
     overflow: hidden;
+
+    @include medium-screen {
+      float: initial;
+      margin: auto;
+    }
+    @include small-screen {
+      width: 100%;
+    }
   }
   .side_bar {
     width: calc(100% - 450px);
     border: 1px solid red;
     height: 100%;
     float: left;
+
+    // Responsive
+
+    @include medium-screen {
+      display: block;
+      float: initial;
+      margin: auto;
+      width: 450px;
+      height: 50px;
+    }
+    @include small-screen {
+      width: 100%;
+    }
+  }
+  @include large-screen {
+    box-shadow: rgba(0, 0, 0, 0.09) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px,
+      rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px,
+      rgba(0, 0, 0, 0.09) 0px 32px 16px;
+  }
+  @include small-screen {
+    width: auto;
+  }
+  @include medium-screen {
+    width: auto;
   }
 }
 
@@ -36,6 +69,10 @@
   display: flex;
   justify-content: space-around;
   align-items: center;
+
+  @include small-screen {
+    width: 80%;
+  }
 }
 
 .login_switch,
@@ -52,6 +89,7 @@
   height: 60px;
   width: 150px;
   border-radius: 50px;
+  // border: 2px solid green;
   background-image: linear-gradient(
     to right,
     rgb(255, 195, 110),
@@ -61,10 +99,18 @@
   top: 20px;
   left: 75px;
   transition: all 0.5s ease-in-out;
+
+  @include small-screen {
+    left: 10%;
+    width: 38%;
+  }
 }
 
 .moveslider {
   left: 225px;
+  @include small-screen {
+    left: 52%;
+  }
 }
 
 .form-section {
@@ -74,10 +120,17 @@
   position: relative;
   transition: all 0.5s ease-in-out;
   left: 0px;
+
+  @include small-screen {
+    width: 200%;
+  }
 }
 
 .form-section-move {
   left: -450px;
+  @include small-screen {
+    left: -100%;
+  }
 }
 
 .login-box,
@@ -85,6 +138,10 @@
   // height: 100%;
   width: 450px;
   padding: 0px 40px;
+
+  @include small-screen {
+    width: 100%;
+  }
 }
 
 .login-box {
