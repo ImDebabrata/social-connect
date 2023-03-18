@@ -1,0 +1,97 @@
+@import "../../styles/config.scss";
+@import "form";
+
+.container {
+  width: 650px;
+  height: 400px;
+  margin: auto;
+  border: 2px solid black;
+  position: relative;
+  transition: all 0.5s ease-in-out;
+  > .form_container {
+    width: 450px;
+    height: 100%;
+    border: 1px solid blue;
+    float: left;
+    overflow: hidden;
+  }
+  .side_bar {
+    width: calc(100% - 450px);
+    border: 1px solid red;
+    height: 100%;
+    float: left;
+  }
+}
+
+.container_signup {
+  height: 530px;
+}
+
+.switch_button_container {
+  height: 60px;
+  width: 300px;
+  margin: 20px auto;
+  box-shadow: 10px 10px 30px rgb(254, 215, 188);
+  border-radius: 50px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.login_switch,
+.signup_switch {
+  font-size: 22px;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  position: relative;
+  cursor: pointer;
+}
+
+.slider {
+  height: 60px;
+  width: 150px;
+  border-radius: 50px;
+  background-image: linear-gradient(
+    to right,
+    rgb(255, 195, 110),
+    rgb(255, 146, 91)
+  );
+  position: absolute;
+  top: 20px;
+  left: 75px;
+  transition: all 0.5s ease-in-out;
+}
+
+.moveslider {
+  left: 225px;
+}
+
+.form-section {
+  width: 900px;
+  padding: 20px 0;
+  display: flex;
+  position: relative;
+  transition: all 0.5s ease-in-out;
+  left: 0px;
+}
+
+.form-section-move {
+  left: -450px;
+}
+
+.login-box,
+.signup-box {
+  // height: 100%;
+  width: 450px;
+  padding: 0px 40px;
+}
+
+.login-box {
+  gap: 50px;
+  height: fit-content;
+}
+
+.signup-box {
+  gap: 30px;
+}
