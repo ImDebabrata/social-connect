@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import style from "../../pages/authenticate/auth.module.scss";
-import { ImSpinner3 } from "react-icons/im";
+import { ImSpinner4 } from "react-icons/im";
 
 const initialState = {
   name: "",
@@ -44,7 +44,7 @@ const Signup = () => {
         <div className={style.input_container}>
           <label
             className={userInfo.email.length ? style.label_top : ""}
-            htmlFor="email"
+            htmlFor="_email"
           >
             Enter Email *
           </label>
@@ -53,14 +53,14 @@ const Signup = () => {
             name="email"
             onChange={handleUserInfo}
             type="email"
-            id="email"
+            id="_email"
           />
         </div>
         {/* Password */}
         <div className={style.input_container}>
           <label
             className={userInfo.password.length ? style.label_top : ""}
-            htmlFor="password"
+            htmlFor="_password"
           >
             Enter Password *
           </label>
@@ -69,7 +69,7 @@ const Signup = () => {
             name="password"
             onChange={handleUserInfo}
             type="password"
-            id="password"
+            id="_password"
           />
         </div>
         {/* Confirm Password */}
@@ -90,7 +90,7 @@ const Signup = () => {
         </div>
         {/* Submit */}
         <button className={style.submit_button} type="submit">
-          {true ? <ImSpinner3 /> : "Signup"}
+          {true ? <ImSpinner4 /> : "Signup"}
         </button>
       </form>
     </div>

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import style from "../../pages/authenticate/auth.module.scss";
-import { ImSpinner3 } from "react-icons/im";
+import { ImSpinner4 } from "react-icons/im";
 
 const initialState = {
   name: "",
@@ -57,7 +57,7 @@ const Login = () => {
         </div>
         {/* Submit */}
         <button className={style.submit_button} type="submit">
-          {true ? <ImSpinner3 /> : "Signup"}
+          {true ? <ImSpinner4 /> : "Signup"}
         </button>
       </form>
     </div>

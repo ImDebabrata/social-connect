@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Login from "../../components/auth/Login";
 import style from "./auth.module.scss";
 import Signup from "@/components/auth/Signup";
+import { FcGoogle } from "react-icons/fc";
 
 const Authenticate = () => {
   const [currentForm, setCurrentForm] = useState("login");
@@ -48,7 +49,18 @@ const Authenticate = () => {
           <Signup />
         </div>
       </div>
-      <div className={style.side_bar}></div>
+      <div
+        className={`${style.side_bar} ${
+          currentForm === "signup" ? style.side_bar_move : ""
+        }`}
+      >
+        <p>Connecting you to the world, one post at a time</p>
+        <span>Continue with</span>
+        <button>
+          {<FcGoogle />}
+          <span>Google</span>
+        </button>
+      </div>
     </div>
   );
 };
