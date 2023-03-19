@@ -3,11 +3,16 @@ import Login from "../../components/auth/Login";
 import style from "./auth.module.scss";
 import Signup from "@/components/auth/Signup";
 import { FcGoogle } from "react-icons/fc";
+import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { auth, provider } from "../../firebase/firebaseConfig";
 
 const Authenticate = () => {
   const [currentForm, setCurrentForm] = useState("login");
   const handleCurrentForm = (type: string) => {
     setCurrentForm(type);
+  };
+  const handleGoogleSignin = () => {
+    signInWithPopup(auth, provider);
   };
   return (
     <div
@@ -56,7 +61,7 @@ const Authenticate = () => {
       >
         <p>Connecting you to the world, one post at a time</p>
         <span>Continue with</span>
-        <button>
+        <button onClick={handleGoogleSignin}>
           {<FcGoogle />}
           <span>Google</span>
         </button>
