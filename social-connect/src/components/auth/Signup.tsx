@@ -1,8 +1,17 @@
 import React, { useState } from "react";
 import style from "../../pages/authenticate/auth.module.scss";
 import { ImSpinner4 } from "react-icons/im";
+import { useAppDispatch, useAppSelector } from "../../redux/typedHooks";
+import { useSignupMutation } from "@/redux/apiSlice";
 
-const initialState = {
+export interface signupUserType {
+  name: string;
+  email: string;
+  password: string;
+  confirmpassword: string;
+}
+
+const initialState: signupUserType = {
   name: "",
   email: "",
   password: "",
@@ -11,14 +20,28 @@ const initialState = {
 
 const Signup = () => {
   const [userInfo, setUserInfo] = useState(initialState);
+  const [signup, { isLoading }] = useSignupMutation();
+  const dispatch = useAppDispatch();
 
   const handleUserInfo: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     const { value, name } = e.target;
     setUserInfo({ ...userInfo, [name]: value });
   };
 
-  const handleFormSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
+  const handleFormSubmit: React.FormEventHandler<HTMLFormElement> = async (
+    e
+  ) => {
     e.preventDefault();
+    if (userInfo.password !== userInfo.confirmpassword) {
+      alert("Password not match");
+    } else {
+      try {
+        const { res } = await signup(userInfo).unwrap();
+        alert(res);
+      } catch (err: any) {
+        alert(err.data.res);
+      }
+    }
   };
 
   return (
@@ -90,7 +113,7 @@ const Signup = () => {
         </div>
         {/* Submit */}
         <button className={style.submit_button} type="submit">
-          {true ? <ImSpinner4 /> : "Signup"}
+          {isLoading ? <ImSpinner4 /> : "Signup"}
         </button>
       </form>
     </div>
