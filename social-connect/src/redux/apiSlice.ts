@@ -13,10 +13,13 @@ export const apiSlice = createApi({
       }),
     }),
     loginGoogle: builder.mutation({
-      query: (token: string) => ({
+      query: (token: { token: string }) => ({
         url: "/auth/googlelogin",
         method: "POST",
-        body: token,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(token),
       }),
     }),
   }),
