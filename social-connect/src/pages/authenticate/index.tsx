@@ -8,6 +8,7 @@ import { auth, provider } from "../../firebase/firebaseConfig";
 import { useLoginGoogleMutation } from "@/redux/apiSlice";
 import { useAppDispatch } from "@/redux/typedHooks";
 import { loginSuccess } from "@/redux/authSlice";
+import { ImSpinner4 } from "react-icons/im";
 
 const Authenticate = () => {
   const [currentForm, setCurrentForm] = useState("login");
@@ -82,9 +83,18 @@ const Authenticate = () => {
       >
         <p>Connecting you to the world, one post at a time</p>
         <span>Continue with</span>
-        <button onClick={handleGoogleSignin}>
-          {<FcGoogle />}
-          <span>Google</span>
+        <button
+          className={`${isLoading ? style.button_spin : ""}`}
+          onClick={handleGoogleSignin}
+        >
+          {isLoading ? (
+            <ImSpinner4 />
+          ) : (
+            <>
+              {<FcGoogle />}
+              <span>Google</span>
+            </>
+          )}
         </button>
       </div>
     </div>

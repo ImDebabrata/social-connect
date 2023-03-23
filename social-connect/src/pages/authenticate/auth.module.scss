@@ -79,6 +79,10 @@
       &:active {
         background-color: #aec2b6;
       }
+
+      &.button_spin > svg {
+        @include rotate;
+      }
     }
     // Responsive
 
