@@ -12,6 +12,13 @@ export const apiSlice = createApi({
         body: payload,
       }),
     }),
+    login: builder.mutation({
+      query: (payload: any) => ({
+        url: "/auth/login",
+        method: "POST",
+        body: payload,
+      }),
+    }),
     loginGoogle: builder.mutation({
       query: (token: { token: string }) => ({
         url: "/auth/googlelogin",
@@ -25,4 +32,5 @@ export const apiSlice = createApi({
   }),
 });
 
-export const { useSignupMutation, useLoginGoogleMutation } = apiSlice;
+export const { useSignupMutation, useLoginMutation, useLoginGoogleMutation } =
+  apiSlice;

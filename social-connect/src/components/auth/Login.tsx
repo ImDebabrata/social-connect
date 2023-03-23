@@ -1,16 +1,24 @@
 import React, { useState } from "react";
 import style from "../../pages/authenticate/auth.module.scss";
 import { ImSpinner4 } from "react-icons/im";
+import { useLoginMutation } from "@/redux/apiSlice";
+import { loginSuccess } from "@/redux/authSlice";
+import { useAppDispatch } from "@/redux/typedHooks";
 
-const initialState = {
-  name: "",
+export interface loginUserType {
+  email: string;
+  password: string;
+}
+
+const initialState: loginUserType = {
   email: "",
   password: "",
-  confirmpassword: "",
 };
 
 const Login = () => {
   const [userInfo, setUserInfo] = useState(initialState);
+  const [login, { isLoading }] = useLoginMutation();
+  const dispatch = useAppDispatch();
 
   const handleUserInfo: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     const { value, name } = e.target;
@@ -19,6 +27,13 @@ const Login = () => {
 
   const handleFormSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
+    login(userInfo)
+      .unwrap()
+      .then((res) => {
+        alert(res.res);
+        dispatch(loginSuccess(res.token));
+      })
+      .catch((err) => alert(err.data.res));
   };
   return (
     <div className={style["login-box"]}>
@@ -57,7 +72,7 @@ const Login = () => {
         </div>
         {/* Submit */}
         <button className={style.submit_button} type="submit">
-          {true ? <ImSpinner4 /> : "Signup"}
+          {isLoading ? <ImSpinner4 /> : "Login"}
         </button>
       </form>
     </div>
