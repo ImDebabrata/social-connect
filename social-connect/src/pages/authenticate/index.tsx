@@ -5,14 +5,34 @@ import Signup from "@/components/auth/Signup";
 import { FcGoogle } from "react-icons/fc";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { auth, provider } from "../../firebase/firebaseConfig";
+import { useLoginGoogleMutation } from "@/redux/apiSlice";
 
 const Authenticate = () => {
   const [currentForm, setCurrentForm] = useState("login");
+  const [loginGoogle, { isLoading }] = useLoginGoogleMutation();
   const handleCurrentForm = (type: string) => {
     setCurrentForm(type);
   };
   const handleGoogleSignin = () => {
-    signInWithPopup(auth, provider);
+    signInWithPopup(auth, provider)
+      .then((result: any) => {
+        const { accessToken } = result.user;
+        //fetching data to backend
+        loginGoogle(accessToken)
+          .unwrap()
+          .then((res) => console.log(res))
+          .catch((err) => console.log("Encountered error", err));
+      })
+      .catch((error) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // The email of the user's account used.
+        const email = error.customData.email;
+        // The AuthCredential type that was used.
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        // ...
+      });
   };
   return (
     <div
