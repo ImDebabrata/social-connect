@@ -73,3 +73,35 @@ authRouter.post("/login", async (req: Request, res: Response) => {
     }
   }
 });
+
+//Continue with google
+authRouter.post("/googlelogin", async (req: Request, res: Response) => {
+  const { token } = req.body;
+  //getting user info from token;
+  const decodedToken = jwt.decode(token, { complete: true });
+  //error handling
+  if (!token || !decodedToken) {
+    return res.status(400).send({ res: "Encountered invalid token" });
+  }
+  const { name, picture, email } = decodedToken.payload;
+  //creating json token;
+  const createToken = jwt.sign({ name, email }, "secret-code");
+  //Check user is already available in db or not;
+  const userPresent = await UserModel.findOne({ email });
+  if (userPresent) {
+    return res
+      .status(202)
+      .send({ res: `Hello ${userPresent.name}`, token: createToken });
+  } else {
+    //creating new user in database;
+    try {
+      const user = new UserModel({ name, email, profilePic: picture });
+      await user.save();
+      return res
+        .status(201)
+        .send({ res: "Signup with google Successfully", token: createToken });
+    } catch (err) {
+      res.send({ res: "Something went wrong", error: err });
+    }
+  }
+});
