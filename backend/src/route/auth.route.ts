@@ -1,4 +1,6 @@
 import express, { Request, Response } from "express";
+const { otpVerification } = require("../middleware/sendEmail");
+const { checkFields } = require("../middleware/checkFields");
 
 const { UserModel } = require("../models/User.model");
 const bcrypt = require("bcrypt");
@@ -6,28 +8,24 @@ var jwt = require("jsonwebtoken");
 export const authRouter = express.Router();
 
 //Signup route
+authRouter.use("/signup", [checkFields, otpVerification]);
 authRouter.post("/signup", async (req: Request, res: Response) => {
-  const { name, email, password } = req.body;
-  // checking all input fields
-  if (!name || !email || !password) {
-    return res.status(401).send({ res: "Please input all fields" });
-  } else {
-    //checking for user in database
-    const userPresent = await UserModel.findOne({ email });
-    if (userPresent) {
-      return res.status(401).send({ res: "User Already Exists" });
-    } else {
-      try {
-        //hasing user password and saving to database;
-        bcrypt.hash(password, 10, async (err: any, hash: String) => {
-          const user = new UserModel({ name, email, password: hash });
-          await user.save();
-          return res.status(201).send({ res: "Signup Success" });
-        });
-      } catch (error) {
-        return res.send({ res: "Something went wrong", error });
-      }
-    }
+  const { name, email, password, otpData } = req.body;
+  try {
+    //hasing user password and saving to database;
+    bcrypt.hash(password, 10, async (err: any, hash: String) => {
+      const user = new UserModel({
+        name,
+        email,
+        password: hash,
+        otp: otpData,
+        verified: false,
+      });
+      await user.save();
+      return res.status(201).send({ res: "OTP sent to registered mail" });
+    });
+  } catch (error) {
+    return res.send({ res: "Something went wrong", error });
   }
 });
 
