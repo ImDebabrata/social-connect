@@ -16,6 +16,16 @@ const checkFields = async (req: Request, res: Response, next: NextFunction) => {
       return res.status(401).send({ res: "User Already Exists" });
     }
     next();
+  } else {
+    if (!email || !password) {
+      return res.status(401).send({ res: "Please Enter all fields" });
+    }
+    //checking for user in database
+    const userPresent = await UserModel.findOne({ email });
+    if (!userPresent) {
+      return res.status(404).send({ res: "User not found, Please signup" });
+    }
+    next();
   }
 };
 

@@ -30,45 +30,39 @@ authRouter.post("/signup", async (req: Request, res: Response) => {
 });
 
 //Login route
+authRouter.use("/login", checkFields);
 authRouter.post("/login", async (req: Request, res: Response) => {
   const { email, password } = req.body;
   //checking email and passwords are not empty;
-  if (!email || !password) {
-    return res.status(401).send({ res: "Please Enter all fields" });
-  } else {
-    //checking user in database;
-    const userPresent = await UserModel.findOne({ email });
-    if (!userPresent) {
-      return res.status(404).send({ res: "User not found, Please signup" });
-    } else {
-      try {
-        const hashedPassword = userPresent.password;
-        //comparing user entered password with database password
-        bcrypt.compare(
-          password,
-          hashedPassword,
-          (err: any, result: Boolean) => {
-            if (result) {
-              //Creating json web token
-              const token = jwt.sign(
-                {
-                  email: userPresent.email,
-                  name: userPresent.name,
-                },
-                "secret-code"
-              );
-              return res
-                .status(200)
-                .send({ res: `Hello ${userPresent.name}`, token });
-            } else {
-              return res.status(401).send({ res: "Password incorrect" });
-            }
-          }
+
+  //checking user in database;
+  const userPresent = await UserModel.findOne({ email });
+  try {
+    const hashedPassword = userPresent.password;
+    //comparing user entered password with database password
+    bcrypt.compare(password, hashedPassword, (err: any, result: Boolean) => {
+      if (result) {
+        //Checking Email is verified or not
+        if (userPresent.verified === false) {
+          res.status(401).send({ res: "Email is not verified" });
+        }
+        //Creating json web token
+        const token = jwt.sign(
+          {
+            email: userPresent.email,
+            name: userPresent.name,
+          },
+          "secret-code"
         );
-      } catch (error) {
-        return res.send({ res: "Something went wrong", error });
+        return res
+          .status(200)
+          .send({ res: `Hello ${userPresent.name}`, token });
+      } else {
+        return res.status(401).send({ res: "Password incorrect" });
       }
-    }
+    });
+  } catch (error) {
+    return res.send({ res: "Something went wrong", error });
   }
 });
 
