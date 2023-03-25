@@ -1,0 +1,58 @@
+@import "../../styles//config.scss";
+
+.otp_box {
+  top: -50%;
+  position: relative;
+  border: 1px solid rgba(128, 128, 128, 0.61);
+  background-color: white;
+  transition: 0.5s;
+  padding: 20px;
+  width: 450px;
+  margin: auto;
+  > button {
+    width: 19.5rem;
+    padding: 1rem 0;
+    display: block;
+    margin: auto;
+    font-size: 2rem;
+    background-color: #3e54ac;
+    color: white;
+    border: none;
+    border-radius: 0.3rem;
+    cursor: pointer;
+    &:active {
+      background-color: #3795bd;
+    }
+  }
+
+  > svg {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 4rem;
+    cursor: pointer;
+  }
+  &.openOtp_box {
+    top: 0;
+  }
+  @include small-screen {
+    width: 100%;
+  }
+}
+
+.inputbox_container {
+  margin: 10px 0;
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  > input {
+    border-radius: 1rem;
+    padding: 1rem;
+    font-size: 4rem;
+    border: 1px solid gray;
+    width: 45px;
+    &:focus {
+      outline: 2px solid blue;
+    }
+  }
+}

@@ -29,8 +29,22 @@ export const apiSlice = createApi({
         body: JSON.stringify(token),
       }),
     }),
+    verifyOtp: builder.mutation({
+      query: (payload: { otp: number; email: string }) => ({
+        url: "/auth/verifyotp",
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      }),
+    }),
   }),
 });
 
-export const { useSignupMutation, useLoginMutation, useLoginGoogleMutation } =
-  apiSlice;
+export const {
+  useSignupMutation,
+  useLoginMutation,
+  useLoginGoogleMutation,
+  useVerifyOtpMutation,
+} = apiSlice;
