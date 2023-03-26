@@ -39,8 +39,10 @@ const Login = () => {
       .catch((err) => {
         if (err?.data?.res) {
           alert(err.data.res);
-          dispatch(setOtpMail(err.data.email));
-          setPopupStatus(true);
+          if (err.data.res === "Email is not verified") {
+            dispatch(setOtpMail(err.data.email));
+            setPopupStatus(true);
+          }
         } else {
           alert("Something went wrong");
         }
