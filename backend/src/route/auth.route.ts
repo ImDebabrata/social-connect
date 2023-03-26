@@ -106,9 +106,9 @@ authRouter.post("/verifyotp", async (req: Request, res: Response) => {
   try {
     const user = await UserModel.findOne({ email });
     if (user?.otp?.OTP === +otp) {
-      const result = await UserModel.findOneAndUpdate(
+      await UserModel.findOneAndUpdate(
         { email },
-        { verified: false },
+        { verified: true },
         { new: true }
       );
       return res.send({ res: "OTP verification success" });
