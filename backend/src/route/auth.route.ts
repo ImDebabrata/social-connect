@@ -46,7 +46,7 @@ authRouter.post("/login", async (req: Request, res: Response) => {
       if (result) {
         //Checking Email is verified or not
         if (userPresent.verified === false) {
-          return res.status(401).send({ res: "Email is not verified" });
+          return res.status(401).send({ res: "Email is not verified", email });
         }
         //Creating json web token
         const token = jwt.sign(
