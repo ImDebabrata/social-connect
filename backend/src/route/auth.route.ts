@@ -22,7 +22,9 @@ authRouter.post("/signup", async (req: Request, res: Response) => {
         verified: false,
       });
       await user.save();
-      return res.status(201).send({ res: "OTP sent to registered mail" });
+      return res
+        .status(201)
+        .send({ res: "OTP sent to registered mail", email });
     });
   } catch (error) {
     return res.send({ res: "Something went wrong", error });
@@ -44,7 +46,7 @@ authRouter.post("/login", async (req: Request, res: Response) => {
       if (result) {
         //Checking Email is verified or not
         if (userPresent.verified === false) {
-          res.status(401).send({ res: "Email is not verified" });
+          return res.status(401).send({ res: "Email is not verified" });
         }
         //Creating json web token
         const token = jwt.sign(
@@ -95,5 +97,25 @@ authRouter.post("/googlelogin", async (req: Request, res: Response) => {
     } catch (err) {
       res.send({ res: "Something went wrong", error: err });
     }
+  }
+});
+
+//Verify Otp route;
+authRouter.post("/verifyotp", async (req: Request, res: Response) => {
+  const { otp, email } = req.body;
+  try {
+    const user = await UserModel.findOne({ email });
+    if (user?.otp?.OTP === +otp) {
+      const result = await UserModel.findOneAndUpdate(
+        { email },
+        { verified: false },
+        { new: true }
+      );
+      return res.send({ res: "OTP verification success", result });
+    } else {
+      return res.status(401).send({ res: "OTP you have entered is wrong" });
+    }
+  } catch (err) {
+    return res.send({ res: "Something went wrong", error: err });
   }
 });
