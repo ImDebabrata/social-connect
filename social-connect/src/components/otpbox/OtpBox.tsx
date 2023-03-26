@@ -71,8 +71,11 @@ const OtpBox: React.FC<PinProps> = ({
   const handleVerifyOtp = () => {
     verifyOtp({ otp: +pinInput, email: otpMail! })
       .unwrap()
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+      .then((res) => {
+        alert(res.res);
+        setPopupStatus(false);
+      })
+      .catch((err) => alert(err.data.res));
   };
 
   return (
