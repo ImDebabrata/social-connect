@@ -111,7 +111,7 @@ authRouter.post("/verifyotp", async (req: Request, res: Response) => {
         { verified: false },
         { new: true }
       );
-      return res.send({ res: "OTP verification success", result });
+      return res.send({ res: "OTP verification success" });
     } else {
       return res.status(401).send({ res: "OTP you have entered is wrong" });
     }
