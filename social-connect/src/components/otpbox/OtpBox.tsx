@@ -3,7 +3,7 @@ import PinInput from "./PinInput";
 import style from "./otpbox.module.scss";
 import { useAppDispatch, useAppSelector } from "../../redux/typedHooks";
 import { GrFormClose } from "react-icons/gr";
-import { useVerifyOtpMutation } from "@/redux/apiSlice";
+import { useResendOtpMutation, useVerifyOtpMutation } from "@/redux/apiSlice";
 
 interface PinProps {
   length: number;
@@ -26,7 +26,10 @@ const OtpBox: React.FC<PinProps> = ({
   const [singleInputBoxValue] = useState(new Array(length).fill(""));
   const inputRef = useRef<HTMLInputElement[]>([]);
   const [pinInput, setInput] = useState("");
-  const [verifyOtp, { isError }] = useVerifyOtpMutation();
+  const dispatch = useAppDispatch();
+  const [verifyOtp, { isError, isLoading }] = useVerifyOtpMutation();
+  const [resendOtp, { isError: resendError, isLoading: resendLoading }] =
+    useResendOtpMutation();
 
   const { otpMail } = useAppSelector((store) => store.auth);
 
@@ -78,6 +81,13 @@ const OtpBox: React.FC<PinProps> = ({
       .catch((err) => alert(err.data.res));
   };
 
+  const handleResendOtp = () => {
+    resendOtp({ email: otpMail! })
+      .unwrap()
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+  };
+
   return (
     <div
       className={`${style.otp_box} ${isOpen ? style.openOtp_box : ""}`}
@@ -104,6 +114,12 @@ const OtpBox: React.FC<PinProps> = ({
           );
         })}
       </div>
+      <p
+        className={resendLoading ? style.loading : ""}
+        onClick={handleResendOtp}
+      >
+        Resend OTP
+      </p>
       <button onClick={handleVerifyOtp}>Verify OTP</button>
     </div>
   );

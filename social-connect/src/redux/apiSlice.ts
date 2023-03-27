@@ -39,6 +39,16 @@ export const apiSlice = createApi({
         body: JSON.stringify(payload),
       }),
     }),
+    resendOtp: builder.mutation({
+      query: (payload: { email: string }) => ({
+        url: "/auth/resendotp",
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      }),
+    }),
   }),
 });
 
@@ -47,4 +57,5 @@ export const {
   useLoginMutation,
   useLoginGoogleMutation,
   useVerifyOtpMutation,
+  useResendOtpMutation,
 } = apiSlice;
