@@ -1,9 +1,11 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import PinInput from "./PinInput";
 import style from "./otpbox.module.scss";
 import { useAppDispatch, useAppSelector } from "../../redux/typedHooks";
 import { GrFormClose } from "react-icons/gr";
 import { useResendOtpMutation, useVerifyOtpMutation } from "@/redux/apiSlice";
+import { setOtpTimer } from "@/redux/authSlice";
+import timeCounter from "../../helper/userTimer";
 
 interface PinProps {
   length: number;
@@ -30,8 +32,9 @@ const OtpBox: React.FC<PinProps> = ({
   const [verifyOtp, { isError, isLoading }] = useVerifyOtpMutation();
   const [resendOtp, { isError: resendError, isLoading: resendLoading }] =
     useResendOtpMutation();
+  const [timeInterval, setTimeInterval] = useState("");
 
-  const { otpMail } = useAppSelector((store) => store.auth);
+  const { otpMail, otpTimer } = useAppSelector((store) => store.auth);
 
   const onChangeHandler = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -82,11 +85,28 @@ const OtpBox: React.FC<PinProps> = ({
   };
 
   const handleResendOtp = () => {
+    if (timeInterval !== "") {
+      alert(`Please wait for ${timeInterval}`);
+      return;
+    }
     resendOtp({ email: otpMail! })
       .unwrap()
-      .then((res) => console.log(res))
+      .then((res) => {
+        alert(res.res);
+        dispatch(setOtpTimer(res.otpTimer));
+      })
       .catch((err) => console.log(err));
   };
+
+  const timerCallback = (intervalCountdown: string) => {
+    setTimeInterval(intervalCountdown);
+  };
+
+  //Otp countdouwn timer;
+  useEffect(() => {
+    let callbackTimer = timeCounter(otpTimer!, timerCallback);
+    return () => clearInterval(callbackTimer);
+  }, [otpTimer]);
 
   return (
     <div
@@ -115,10 +135,10 @@ const OtpBox: React.FC<PinProps> = ({
         })}
       </div>
       <p
-        className={resendLoading ? style.loading : ""}
+        className={timeInterval !== "" ? style.disable : ""}
         onClick={handleResendOtp}
       >
-        Resend OTP
+        Resend OTP {timeInterval !== "" ? ` In ${timeInterval}` : ""}
       </p>
       <button onClick={handleVerifyOtp}>Verify OTP</button>
     </div>

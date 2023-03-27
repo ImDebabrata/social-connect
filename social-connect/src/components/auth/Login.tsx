@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import style from "../../pages/authenticate/auth.module.scss";
 import { ImSpinner4 } from "react-icons/im";
 import { useLoginMutation } from "@/redux/apiSlice";
-import { loginSuccess, setOtpMail } from "@/redux/authSlice";
+import { loginSuccess, setOtpMail, setOtpTimer } from "@/redux/authSlice";
 import { useAppDispatch } from "@/redux/typedHooks";
 import Popup from "../popup/Popup";
 import OtpBox from "../otpbox/OtpBox";
@@ -40,6 +40,7 @@ const Login = () => {
         if (err?.data?.res) {
           alert(err.data.res);
           if (err.data.res === "Email is not verified") {
+            dispatch(setOtpTimer(err.data.otpTimer));
             dispatch(setOtpMail(err.data.email));
             setPopupStatus(true);
           }

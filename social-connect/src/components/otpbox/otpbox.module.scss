@@ -39,7 +39,8 @@
     cursor: pointer;
     margin: 1rem 0;
 
-    &.resendLoading {
+    &.disable {
+      cursor: not-allowed;
       color: gray;
     }
   }

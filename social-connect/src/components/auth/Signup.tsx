@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from "../../redux/typedHooks";
 import { useSignupMutation } from "@/redux/apiSlice";
 import Popup from "../popup/Popup";
 import OtpBox from "../otpbox/OtpBox";
-import { setOtpMail } from "@/redux/authSlice";
+import { setOtpMail, setOtpTimer } from "@/redux/authSlice";
 
 export interface signupUserType {
   name: string;
@@ -41,9 +41,10 @@ const Signup = () => {
       alert("Password not match");
     } else {
       try {
-        const { res, email } = await signup(userInfo).unwrap();
+        const { res, email, otpTimer } = await signup(userInfo).unwrap();
         alert(res);
         dispatch(setOtpMail(email));
+        dispatch(setOtpTimer(otpTimer));
         setPopupStatus(true);
       } catch (err: any) {
         alert(err.data.res);
