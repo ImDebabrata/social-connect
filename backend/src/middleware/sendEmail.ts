@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 const nodemailer = require("nodemailer");
-
+const { UserModel } = require("../models/User.model");
 // Extend the Request interface to add the custom property
 declare global {
   namespace Express {
@@ -45,6 +45,7 @@ const otpVerification = async (
   next: NextFunction
 ) => {
   const { name, email, password } = req.body;
+  const user = await UserModel.findOne({ email });
   console.log("send email middleware");
 
   const OTP = generateOtp();
@@ -64,7 +65,7 @@ const otpVerification = async (
         <title>OTP Verification Email</title>
       </head>
       <body>
-        <p>Dear ${name},</p>
+        <p>Dear ${user ? user.name : name},</p>
         <p>Thank you for registering with our service. To complete your registration, please enter the following One-Time Password (OTP) on our website:</p>
         <h2 style="font-size: 24px; font-weight: bold; margin-top: 10px; margin-bottom: 20px;">${OTP}</h2>
         <p>Please note that this OTP is valid for a limited time only, and you should use it immediately to avoid any delays in activating your account.</p>
