@@ -1,8 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import style from "./postbox.module.scss";
 import { RiImageAddLine } from "react-icons/ri";
+import "react-image-crop/src/ReactCrop.scss";
+import Cropper from "../imagecropper/Cropper";
 
 const PostBox = () => {
+  const [imgSrc, setImgSrc] = useState("");
+  function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
+    if (e.target.files && e.target.files.length > 0) {
+      const reader = new FileReader();
+      reader.addEventListener("load", () =>
+        setImgSrc(reader.result?.toString() || "")
+      );
+      reader.readAsDataURL(e.target.files[0]);
+    }
+  }
+
   return (
     <div className={style.postbox}>
       <div className={style.post_text}>
@@ -18,6 +31,7 @@ const PostBox = () => {
             <span>Image</span>
           </label>
           <input
+            onChange={handleImageChange}
             type="file"
             name="myImage"
             id="addimage"
@@ -28,6 +42,8 @@ const PostBox = () => {
           <button>POST</button>
         </div>
       </div>
+      {/* Image cropper Container */}
+      {!!imgSrc && <Cropper imgSrc={imgSrc} />}
     </div>
   );
 };
