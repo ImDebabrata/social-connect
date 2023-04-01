@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import style from "./cropper.module.scss";
 import "react-image-crop/src/ReactCrop.scss";
 import ReactCrop, {
   centerCrop,
@@ -39,7 +40,6 @@ interface dataType {
 const Cropper = ({ imgSrc, aspect: asp }: dataType) => {
   // coppied code
   const previewCanvasRef = useRef<HTMLCanvasElement>(null);
-  console.log("previewCanvasRef:", previewCanvasRef);
   const hiddenAnchorRef = useRef<HTMLAnchorElement>(null);
   const blobUrlRef = useRef("");
   const [crop, setCrop] = useState<Crop>();
@@ -94,7 +94,7 @@ const Cropper = ({ imgSrc, aspect: asp }: dataType) => {
     [completedCrop, scale, rotate]
   );
   return (
-    <div>
+    <div className={style.cropper_container}>
       <ReactCrop
         crop={crop}
         onChange={(_, percentCrop) => setCrop(percentCrop)}
@@ -120,22 +120,31 @@ const Cropper = ({ imgSrc, aspect: asp }: dataType) => {
                 objectFit: "contain",
                 width: completedCrop.width,
                 height: completedCrop.height,
+                display: "none",
               }}
             />
           </div>
-          <div>
-            <button onClick={onDownloadCropClick}>Download Crop</button>
-            <a
-              ref={hiddenAnchorRef}
-              download
-              style={{
-                position: "absolute",
-                top: "-200vh",
-                visibility: "hidden",
-              }}
-            >
-              Hidden download
-            </a>
+          <div className={style.cropper_config}>
+            {/* Scale slider */}
+            <label htmlFor="scale">Set Scale</label>
+            <input
+              id="scale"
+              type="range"
+              min={1}
+              max={10}
+              value={scale}
+              onChange={(e) => setScale(+e.target.value)}
+            />
+            {/* Rotate Slider */}
+            <label htmlFor="rotate">Rotate Image</label>
+            <input
+              id="rotate"
+              type="range"
+              min={0}
+              max={360}
+              value={rotate}
+              onChange={(e) => setRotate(+e.target.value)}
+            />
           </div>
         </>
       )}

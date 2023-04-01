@@ -1,0 +1,15 @@
+.cropper_container {
+  padding: 10px 0;
+  margin: 10px 0;
+}
+
+.cropper_config {
+  > label,
+  > input {
+    display: block;
+    margin: auto;
+    text-align: center;
+    font-size: 1.6rem;
+    width: 80%;
+  }
+}
