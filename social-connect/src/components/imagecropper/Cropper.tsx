@@ -8,6 +8,7 @@ import ReactCrop, {
   PixelCrop,
 } from "react-image-crop";
 import { useDebounceEffect } from "@/helper/useDebounceEffect";
+
 import { canvasPreview } from "@/helper/canvasPreview";
 
 // This is to demonstate how to make and center a % aspect crop
@@ -35,9 +36,10 @@ function centerAspectCrop(
 interface dataType {
   imgSrc: string;
   aspect?: number | undefined;
+  setImage: React.Dispatch<React.SetStateAction<File | null | Blob>>;
 }
 
-const Cropper = ({ imgSrc, aspect: asp }: dataType) => {
+const Cropper = ({ imgSrc, aspect: asp, setImage }: dataType) => {
   // coppied code
   const previewCanvasRef = useRef<HTMLCanvasElement>(null);
   const hiddenAnchorRef = useRef<HTMLAnchorElement>(null);
@@ -93,6 +95,13 @@ const Cropper = ({ imgSrc, aspect: asp }: dataType) => {
     100,
     [completedCrop, scale, rotate]
   );
+
+  const handleMakeChanges = () => {
+    previewCanvasRef.current &&
+      previewCanvasRef.current?.toBlob((blob) => {
+        setImage(blob);
+      });
+  };
   return (
     <div className={style.cropper_container}>
       <ReactCrop
@@ -145,6 +154,7 @@ const Cropper = ({ imgSrc, aspect: asp }: dataType) => {
               value={rotate}
               onChange={(e) => setRotate(+e.target.value)}
             />
+            <button onClick={handleMakeChanges}>Make Changes</button>
           </div>
         </>
       )}
