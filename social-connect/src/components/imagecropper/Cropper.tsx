@@ -42,8 +42,6 @@ interface dataType {
 const Cropper = ({ imgSrc, aspect: asp, setImage }: dataType) => {
   // coppied code
   const previewCanvasRef = useRef<HTMLCanvasElement>(null);
-  const hiddenAnchorRef = useRef<HTMLAnchorElement>(null);
-  const blobUrlRef = useRef("");
   const [crop, setCrop] = useState<Crop>();
   const [aspect, setAspect] = useState<number | undefined>(asp);
   const imgRef = useRef<HTMLImageElement>(null);
@@ -56,23 +54,6 @@ const Cropper = ({ imgSrc, aspect: asp, setImage }: dataType) => {
       const { width, height } = e.currentTarget;
       setCrop(centerAspectCrop(width, height, aspect));
     }
-  }
-  function onDownloadCropClick() {
-    if (!previewCanvasRef.current) {
-      throw new Error("Crop canvas does not exist");
-    }
-
-    previewCanvasRef.current.toBlob((blob) => {
-      if (!blob) {
-        throw new Error("Failed to create blob");
-      }
-      if (blobUrlRef.current) {
-        URL.revokeObjectURL(blobUrlRef.current);
-      }
-      blobUrlRef.current = URL.createObjectURL(blob);
-      hiddenAnchorRef.current!.href = blobUrlRef.current;
-      hiddenAnchorRef.current!.click();
-    });
   }
   useDebounceEffect(
     async () => {
