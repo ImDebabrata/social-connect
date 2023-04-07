@@ -3,10 +3,19 @@
 .container {
   max-width: 480px;
   //   height: 300px;
-  border: 1px solid black;
+  border: 1px solid rgba(0, 0, 0, 0.274);
   margin: 40px auto;
   padding: 10px;
   border-radius: 0.5rem;
+  position: relative;
+  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}
+
+.options {
+  font-size: 2rem;
+  position: absolute;
+  right: 15px;
+  cursor: pointer;
 }
 
 .heading {
@@ -25,7 +34,14 @@
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  border: 1px solid black;
+  overflow: hidden;
+  // border: 1px solid black;
+  > svg {
+    font-size: 5rem;
+  }
+  > img {
+    width: 100%;
+  }
 }
 
 .name {
@@ -41,7 +57,7 @@
   margin: 10px 0;
   width: 100%;
   //   height: 40px;
-  border: 1px solid black;
+  // border: 1px solid black;
   > p {
     font-size: 2rem;
   }
@@ -49,12 +65,16 @@
 .post_image {
   margin: 10px 0;
   width: 100%;
-  height: 300px;
-  border: 1px solid black;
+  // height: 300px;
+  // border: 1px solid black;
+
+  > img {
+    width: 100%;
+  }
 }
 
 .like_comment {
-  //   border: 1px solid black;
+  // border: 1px solid black;
   display: flex;
   justify-content: space-around;
   > div {
