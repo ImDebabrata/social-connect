@@ -26,8 +26,12 @@ const PostBox = () => {
   }
 
   const handlePost = () => {
+    // checking for image is selected or not
+    if (image) {
+      uploadImage(image!, "datta@gmail.com/file", "checking");
+      console.log(uploadProgress);
+    }
     console.log(postText);
-    uploadImage(image!, "datta@gmail.com/file", "checking");
   };
 
   return (

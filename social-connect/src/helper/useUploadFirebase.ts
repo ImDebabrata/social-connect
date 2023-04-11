@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   ref,
   uploadBytesResumable,
@@ -8,9 +8,15 @@ import {
 import { storage } from "@/firebase/firebaseConfig";
 
 const useFirebaseImageUpload = () => {
-  const [uploadProgress, setUploadProgress] = useState(0);
+  const [uploadProgress, setUploadProgress] = useState<null | number>(null);
   const [downloadURL, setDownloadURL] = useState<string | null>(null);
   const [error, setError] = useState<StorageError | any>(null);
+
+  useEffect(() => {
+    setUploadProgress(null);
+    setDownloadURL(null);
+    setError(null);
+  }, [error, downloadURL, uploadProgress]);
 
   const uploadImage = async (
     blob: Blob,
