@@ -3,6 +3,7 @@ const cors = require("cors");
 require("dotenv").config();
 import { connection } from "./config/db";
 import { authRouter } from "./route/auth.route";
+import { postRouter } from "./route/post.route";
 
 const app = express();
 const PORT = process.env.PORT || 6001;
@@ -15,6 +16,7 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.use("/auth", authRouter);
+app.use("/post", postRouter);
 
 app.listen(PORT, async () => {
   try {
