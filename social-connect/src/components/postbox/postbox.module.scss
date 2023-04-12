@@ -20,7 +20,15 @@
     width: 7rem;
     height: 7rem;
     border-radius: 50%;
-    border: 1px solid green;
+    overflow: hidden;
+
+    > svg {
+      font-size: 6.8rem;
+      color: #4d4d4d;
+    }
+    > img {
+      width: 100%;
+    }
   }
   > .user_input {
     width: calc(97% - 7rem);

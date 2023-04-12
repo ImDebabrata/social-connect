@@ -9,19 +9,18 @@ import { storage } from "@/firebase/firebaseConfig";
 
 const useFirebaseImageUpload = () => {
   const [uploadProgress, setUploadProgress] = useState<null | number>(null);
-  const [downloadURL, setDownloadURL] = useState<string | null>(null);
   const [error, setError] = useState<StorageError | any>(null);
 
   useEffect(() => {
     setUploadProgress(null);
-    setDownloadURL(null);
     setError(null);
-  }, [error, downloadURL, uploadProgress]);
+  }, [error, uploadProgress]);
 
   const uploadImage = async (
     blob: Blob,
     folderPath: string,
-    fileName: string
+    fileName: string,
+    callbackFunction: Function
   ) => {
     try {
       // Create file metadata
@@ -56,7 +55,7 @@ const useFirebaseImageUpload = () => {
         () => {
           // Upload completed successfully, now we can get the download URL
           getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-            setDownloadURL(url);
+            callbackFunction(url);
           });
         }
       );
@@ -68,7 +67,6 @@ const useFirebaseImageUpload = () => {
   return {
     uploadImage,
     uploadProgress,
-    downloadURL,
     error,
   };
 };

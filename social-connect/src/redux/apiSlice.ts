@@ -59,6 +59,17 @@ export const apiSlice = createApi({
     allPosts: builder.query({
       query: () => "/post",
     }),
+    //add new post Endpoint
+    newPost: builder.mutation({
+      query: (payload) => ({
+        url: "/post",
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      }),
+    }),
   }),
 });
 
@@ -69,4 +80,5 @@ export const {
   useVerifyOtpMutation,
   useResendOtpMutation,
   useAllPostsQuery,
+  useNewPostMutation,
 } = apiSlice;
