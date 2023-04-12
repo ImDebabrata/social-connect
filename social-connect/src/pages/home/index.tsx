@@ -1,12 +1,21 @@
 import PostBox from "@/components/postbox/PostBox";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import PostViewer from "@/components/postviewer/PostViewer";
+import { useDispatch } from "react-redux";
+import { useAllPostsQuery } from "@/redux/apiSlice";
 
 const Home = () => {
+  const { data, isLoading, isError } = useAllPostsQuery({});
+  console.log("data:", data);
+
   return (
     <div>
       <PostBox />
-      <PostViewer />
+      {/* <PostViewer /> */}
+      {/* mapping post according to the number of posts */}
+      {data?.posts.map((post: any) => {
+        return <PostViewer key={post._id} {...post} />;
+      })}
     </div>
   );
 };

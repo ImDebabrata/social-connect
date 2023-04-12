@@ -4,6 +4,7 @@ import { signupUserType } from "@/components/auth/Signup";
 export const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:6001" }),
+  //Signup Endpoint
   endpoints: (builder) => ({
     signup: builder.mutation({
       query: (payload: signupUserType) => ({
@@ -12,6 +13,7 @@ export const apiSlice = createApi({
         body: payload,
       }),
     }),
+    //Login Endpoint
     login: builder.mutation({
       query: (payload: any) => ({
         url: "/auth/login",
@@ -19,6 +21,7 @@ export const apiSlice = createApi({
         body: payload,
       }),
     }),
+    //Google Login Endpoint
     loginGoogle: builder.mutation({
       query: (token: { token: string }) => ({
         url: "/auth/googlelogin",
@@ -29,6 +32,7 @@ export const apiSlice = createApi({
         body: JSON.stringify(token),
       }),
     }),
+    //Verify Otp Endpoint
     verifyOtp: builder.mutation({
       query: (payload: { otp: number; email: string }) => ({
         url: "/auth/verifyotp",
@@ -39,6 +43,7 @@ export const apiSlice = createApi({
         body: JSON.stringify(payload),
       }),
     }),
+    //Resend Otp Endpoint
     resendOtp: builder.mutation({
       query: (payload: { email: string }) => ({
         url: "/auth/resendotp",
@@ -49,6 +54,11 @@ export const apiSlice = createApi({
         body: JSON.stringify(payload),
       }),
     }),
+    //Post Section Endpoints
+    //Get all posts Endpoint
+    allPosts: builder.query({
+      query: () => "/post",
+    }),
   }),
 });
 
@@ -58,4 +68,5 @@ export const {
   useLoginGoogleMutation,
   useVerifyOtpMutation,
   useResendOtpMutation,
+  useAllPostsQuery,
 } = apiSlice;
