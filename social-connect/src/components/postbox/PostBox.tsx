@@ -11,7 +11,7 @@ import { useAppDispatch, useAppSelector } from "@/redux/typedHooks";
 import randomString from "@/helper/randomString";
 import ProgressBar from "../progressbar/ProgressBar";
 
-const PostBox = () => {
+const PostBox = ({ refetch }: { refetch: () => void }) => {
   const { token } = useAppSelector((store) => store.auth);
   //For changing reference file reference, this helps to select same image multiple times
   const [imageKey, setImageKey] = useState(Date.now());
@@ -55,6 +55,7 @@ const PostBox = () => {
         setPostText("");
         setFileName("");
         setImage(null);
+        refetch();
       });
   }
   //invoke function on post click
@@ -71,16 +72,17 @@ const PostBox = () => {
         decoded?.payload?.email,
         fileName,
         handleUploadSuccess
-      );
-      // Clearing Image and image src;
-      setImgSrc("");
-      setImage(null);
-      setImageKey(Date.now());
+      ).then(() => {
+        // Clearing Image and image src;
+        setImgSrc("");
+        setImage(null);
+        setImageKey(Date.now());
+      });
     } else {
       newPost({
         content: postText,
         token,
-      });
+      }).then(() => refetch());
     }
   };
 
@@ -124,8 +126,23 @@ const PostBox = () => {
       </div>
       {/* Image cropper Container */}
       {imgSrc && <Cropper setImage={setImage} imgSrc={imgSrc} />}
+      {/* Delete photo button */}
+      {imgSrc && (
+        <button
+          onClick={() => {
+            setFileName("");
+            setImage(null);
+            setImgSrc("");
+            setImageKey(Date.now());
+          }}
+        >
+          Delete Image
+        </button>
+      )}
       {/* upload progress bar */}
-      {uploadProgress && <ProgressBar width={uploadProgress} />}
+      {uploadProgress && uploadProgress > 0 && (
+        <ProgressBar width={uploadProgress} />
+      )}
     </div>
   );
 };

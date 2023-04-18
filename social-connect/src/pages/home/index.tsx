@@ -5,12 +5,11 @@ import { useDispatch } from "react-redux";
 import { useAllPostsQuery } from "@/redux/apiSlice";
 
 const Home = () => {
-  const { data, isLoading, isError } = useAllPostsQuery({});
-  console.log("data:", data);
+  const { data, isLoading, isError, refetch } = useAllPostsQuery({});
 
   return (
     <div>
-      <PostBox />
+      <PostBox refetch={refetch} />
       {/* <PostViewer /> */}
       {/* mapping post according to the number of posts */}
       {data?.posts.map((post: any) => {
