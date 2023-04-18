@@ -1,22 +1,28 @@
 import { Request, Response } from "express";
 import { UserModel } from "../models/User.model";
 import { PostModal } from "../models/Post.modal";
+import { AuthenticatedRequest } from "../middleware/verifyToken";
 
 //Creating a new post
-const createPost = async (req: Request, res: Response) => {
-  const { content, post_image, email } = req.body;
-  //Checking for user
-  const userPresent = await UserModel.findOne({ email });
-  if (!userPresent) {
-    res.status(400).send({ res: "No user found" });
+const createPost = async (req: AuthenticatedRequest, res: Response) => {
+  const { content, post_image } = req.body;
+  const user = req.user;
+  try {
+    //Checking for user
+    const userPresent = await UserModel.findOne({ email: user!.email });
+    if (!userPresent) {
+      res.status(400).send({ res: "No user found" });
+    }
+    const post = new PostModal({
+      content,
+      post_image,
+      userId: userPresent._id,
+    });
+    post.save();
+    res.send({ res: "Posted Successfully", post });
+  } catch (error) {
+    res.send({ res: "Something went wrong", error });
   }
-  const post = new PostModal({
-    content,
-    post_image,
-    userId: userPresent._id,
-  });
-  post.save();
-  res.send({ res: "Posted Successfully", post });
 };
 
 //Deleting post by id

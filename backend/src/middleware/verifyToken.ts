@@ -1,8 +1,28 @@
 import { NextFunction, Request, Response } from "express";
 import jwt, { VerifyErrors } from "jsonwebtoken";
+import { UserModel } from "../models/User.model";
+import { Document } from "mongoose";
 
-const verifyToken = (req: Request, res: Response, next: NextFunction) => {
-  const { token } = req.body;
+export interface AuthenticatedRequest extends Request {
+  user?: {
+    name: string;
+    email: string;
+    profilePic: string;
+    verified: boolean;
+    [key: string]: any; // index signature to allow any additional properties
+  } & Document<typeof UserModel>;
+}
+
+const verifyToken = (
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader) {
+    return res.status(401).send({ res: "Authorization Error" });
+  }
+  const token = authHeader.split(" ")[1];
   //Verifying token
   jwt.verify(
     token,
@@ -15,7 +35,7 @@ const verifyToken = (req: Request, res: Response, next: NextFunction) => {
           .send({ res: "Unauthorized User", error: "Invalid token" });
       }
       //Passing email from decoded token
-      req.body.email = decoded.email;
+      req.user = decoded;
       next();
     }
   );
