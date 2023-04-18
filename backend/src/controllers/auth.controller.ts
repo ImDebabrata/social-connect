@@ -70,7 +70,11 @@ const login = async (req: Request, res: Response) => {
 
 //Google login
 const googleLogin = async (req: Request, res: Response) => {
-  const { token } = req.body;
+  const authHeader = req.headers.authorization;
+  if (!authHeader) {
+    return res.status(401).send({ res: "Authorization Error" });
+  }
+  const token = authHeader.split(" ")[1];
   //getting user info from token;
   const decodedToken = jwt.decode(token, { complete: true });
   //error handling
