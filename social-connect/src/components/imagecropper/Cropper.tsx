@@ -45,7 +45,7 @@ const Cropper = ({ imgSrc, aspect: asp, setImage }: dataType) => {
   const [crop, setCrop] = useState<Crop>();
   const [aspect, setAspect] = useState<number | undefined>(asp);
   const imgRef = useRef<HTMLImageElement>(null);
-  const [completedCrop, setCompletedCrop] = useState<PixelCrop>();
+  const [completedCrop, setCompletedCrop] = useState<PixelCrop | null>();
   const [scale, setScale] = useState(1);
   const [rotate, setRotate] = useState(0);
 
@@ -81,6 +81,7 @@ const Cropper = ({ imgSrc, aspect: asp, setImage }: dataType) => {
     previewCanvasRef.current &&
       previewCanvasRef.current?.toBlob((blob) => {
         setImage(blob);
+        setCompletedCrop(null);
       });
   };
   return (
@@ -100,7 +101,7 @@ const Cropper = ({ imgSrc, aspect: asp, setImage }: dataType) => {
         />
       </ReactCrop>
 
-      {!!completedCrop && (
+      {completedCrop && (
         <>
           <div>
             <canvas

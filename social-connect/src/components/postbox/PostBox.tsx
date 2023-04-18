@@ -9,9 +9,12 @@ import { useNewPostMutation } from "@/redux/apiSlice";
 const jwt = require("jsonwebtoken");
 import { useAppDispatch, useAppSelector } from "@/redux/typedHooks";
 import randomString from "@/helper/randomString";
+import ProgressBar from "../progressbar/ProgressBar";
 
 const PostBox = () => {
   const { token } = useAppSelector((store) => store.auth);
+  //For changing reference file reference, this helps to select same image multiple times
+  const [imageKey, setImageKey] = useState(Date.now());
   //Image file or blob file;
   const [image, setImage] = useState<null | File | Blob>(null);
   //Store image file name even change the image to bolb file after crop;
@@ -39,15 +42,20 @@ const PostBox = () => {
 
   //Decoding token
   const decoded = jwt.decode(token, { complete: true });
-  console.log("decoded:", decoded);
   //Callback function to get firebase file link and post to backend;
-  function getDownloadUrl(url: string) {
+  function handleUploadSuccess(url: string) {
     newPost({
       fileName,
       content: postText,
       post_image: url,
       token,
-    });
+    })
+      .unwrap()
+      .then(() => {
+        setPostText("");
+        setFileName("");
+        setImage(null);
+      });
   }
   //invoke function on post click
   const handlePost = () => {
@@ -58,8 +66,16 @@ const PostBox = () => {
     // checking for image is selected or not
     if (image) {
       //blob image/file image,file path,file name,callback function
-      uploadImage(image!, decoded?.payload?.email, fileName, getDownloadUrl);
-      // console.log(uploadProgress);
+      uploadImage(
+        image!,
+        decoded?.payload?.email,
+        fileName,
+        handleUploadSuccess
+      );
+      // Clearing Image and image src;
+      setImgSrc("");
+      setImage(null);
+      setImageKey(Date.now());
     } else {
       newPost({
         content: postText,
@@ -94,6 +110,7 @@ const PostBox = () => {
             <span>Image</span>
           </label>
           <input
+            key={imageKey}
             onChange={handleImageChange}
             type="file"
             name="myImage"
@@ -106,7 +123,9 @@ const PostBox = () => {
         </div>
       </div>
       {/* Image cropper Container */}
-      {!!imgSrc && <Cropper setImage={setImage} imgSrc={imgSrc} />}
+      {imgSrc && <Cropper setImage={setImage} imgSrc={imgSrc} />}
+      {/* upload progress bar */}
+      {uploadProgress && <ProgressBar width={uploadProgress} />}
     </div>
   );
 };

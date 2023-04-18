@@ -12,4 +12,22 @@
     font-size: 1.6rem;
     width: 80%;
   }
+  > button {
+    margin-top: 20px;
+    height: 40px;
+    width: 100%;
+    font-weight: bold;
+    font-size: 1.4rem;
+    background-color: #0078ff;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    &:hover {
+      background-color: #016de9;
+    }
+    &:active {
+      background-color: #0078ff;
+    }
+  }
 }

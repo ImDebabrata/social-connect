@@ -14,7 +14,7 @@ const useFirebaseImageUpload = () => {
   useEffect(() => {
     setUploadProgress(null);
     setError(null);
-  }, [error, uploadProgress]);
+  }, [error]);
 
   const uploadImage = async (
     blob: Blob,
@@ -56,6 +56,7 @@ const useFirebaseImageUpload = () => {
           // Upload completed successfully, now we can get the download URL
           getDownloadURL(uploadTask.snapshot.ref).then((url) => {
             callbackFunction(url);
+            setUploadProgress(null);
           });
         }
       );
