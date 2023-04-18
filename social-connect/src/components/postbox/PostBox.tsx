@@ -45,9 +45,7 @@ const PostBox = ({ refetch }: { refetch: () => void }) => {
   //Callback function to get firebase file link and post to backend;
   function handleUploadSuccess(url: string) {
     newPost({
-      fileName,
-      content: postText,
-      post_image: url,
+      payload: { fileName, content: postText, post_image: url },
       token,
     })
       .unwrap()
@@ -80,7 +78,7 @@ const PostBox = ({ refetch }: { refetch: () => void }) => {
       });
     } else {
       newPost({
-        content: postText,
+        payload: { content: postText },
         token,
       }).then(() => refetch());
     }

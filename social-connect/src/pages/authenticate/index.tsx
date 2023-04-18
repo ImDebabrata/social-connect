@@ -22,7 +22,7 @@ const Authenticate = () => {
       .then((result: any) => {
         const { accessToken } = result.user;
         // fetching data to backend
-        loginGoogle({ token: accessToken })
+        loginGoogle(accessToken)
           .unwrap()
           .then((res) => {
             alert(res.res);

@@ -28,8 +28,8 @@ export const apiSlice = createApi({
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(token),
       }),
     }),
     //Verify Otp Endpoint
@@ -61,11 +61,12 @@ export const apiSlice = createApi({
     }),
     //add new post Endpoint
     newPost: builder.mutation({
-      query: (payload) => ({
+      query: ({ payload, token }) => ({
         url: "/post",
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(payload),
       }),
